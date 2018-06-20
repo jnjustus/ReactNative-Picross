@@ -1,0 +1,3 @@
+rootProject.name = 'Picross'
+
+include ':app'

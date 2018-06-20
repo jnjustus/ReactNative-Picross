@@ -5,39 +5,43 @@ import { StackNavigator } from 'react-navigation'
 var LGuide = [];
 var TGuide = [];
 var TTest = ["1","2\n1","1\n2","5","2\n1"];
+var TestCount = 0;
 
+function setInitalState(){
+  return { toggle: false };
+}
 
 function Box(props){
+  
   const boxTrue = props.boxTrue;
   const index = props.index;
-  if(boxTrue == 1 && index%5 == 0){
-    return(
-      <View style={{height:50,backgroundColor:'#000000',width:100}}>
-        <Text>2 3 3</Text>
-      </View>,
-      <View key={index} style={{height:50,backgroundColor:'#000000',width:50,borderWidth:.5}}>
-      </View>
-    )
-  }
+
+  var setStyle = false;
+  
+
   if(boxTrue == 1){
     return(
-      <View  key={index} style={{height:50,backgroundColor:'#000000',width:50,borderWidth:.5}}>
+      <TouchableOpacity onPress={() => 
+        {
+          if(boxTrue ==1){
+            setStyle=true;
+          } else{
+
+            setStyle=false;
+          }
+        }
+      }>
+      <View key={index} style={[styles.whitePixel,setStyle && styles.blackPixel ]}>
       </View>
-    )
-  }
-  if(boxTrue == 0 && index%5 == 0){
-    return(
-      <View style={{height:50,backgroundColor:'#000000',width:100}}>
-        <Text>2 3 3</Text>
-      </View>,
-      <View  key={index} style={{height:50,backgroundColor:'#ffffff',width:50,borderWidth:.5}}>
-      </View>
+      </TouchableOpacity>
     )
   }
   else{
     return(
-      <View  key={index} style={{height:50,backgroundColor:'#ffffff',width:50,borderWidth:.5}}>
+      <TouchableOpacity onPress={() => Alert.alert('Wrong')}>
+      <View  key={index} style={styles.whitePixel}>
       </View>
+      </TouchableOpacity>
     );
   }
 }
@@ -159,6 +163,8 @@ function ColKey(props){
 function Row(props){
   const rowValues = props.rowValues;
   const index = props.index;
+
+
 return(
   <View style={{height:50,display:'flex',flexDirection:'row',flexWrap:'wrap',justifyContent:'center',alignSelf:'center',borderColor:'#000000'}}>
     {rowValues}
@@ -169,16 +175,40 @@ return(
     return(
 
       <Box boxTrue={boxValues} index={index}/>
+
     );
   })}
   </View>
 );
 }
 
+function CheckPixel(props){
+  const stageData = props.stageData;
+  const pixelIndexX = props.pixelIndexX;
+  const pixelIndexY = props.pixelIndexY;
+  var validPixel = 'false';
+
+  if(stageData[pixelIndexY].row[pixelIndexX] === 1){
+    validPixel = true;
+  }
+  else{
+    validPixel = false;
+  }
+
+  return(
+    validPixel
+  );
+
+}
+
 export default class App extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Level ' + navigation.state.params.name,
   })
+  constructor(props) {
+    super(props);
+    this.state = {toggle: false};
+  }
   render() {
     const{params} = this.props.navigation.state;
     console.log('chat props:' , this.props);
@@ -209,7 +239,7 @@ export default class App extends React.Component {
           );
           })}
       </View>
-              
+              <Text style={{display:'flex'}}>TestCount</Text>
         </View>
       </View>
     );
@@ -256,4 +286,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height: 44,
   },
+  
+  whitePixel:{height:50,backgroundColor:'#ffffff',width:50,borderWidth:.5},
+  blackPixel:{height:50,backgroundColor:'#000000',width:50,borderWidth:.5},
 });

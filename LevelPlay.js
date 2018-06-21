@@ -7,8 +7,34 @@ var TGuide = [];
 var TTest = ["1","2\n1","1\n2","5","2\n1"];
 var TestCount = 0;
 
-function setInitalState(){
-  return { toggle: false };
+
+class CreateInteractPixel extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {pickedToggle: false};
+  }
+  render(){
+    const boxTrue = this.props.boxTrue;
+  const index = this.props.index;
+
+  var setStyle = false;
+    if(boxTrue == 1){
+      return(
+        <TouchableOpacity onPress={() => {this.setState({pickedToggle: true})}}>
+          <View key={index} style={[styles.whitePixel,this.state.pickedToggle && styles.blackPixel ]}>
+          </View>
+        </TouchableOpacity>
+      )
+    }
+    else{
+      return(
+        <TouchableOpacity onPress={() => Alert.alert('Wrong')}>
+          <View key={index} style={styles.whitePixel}>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+  }
 }
 
 function Box(props){
@@ -23,10 +49,9 @@ function Box(props){
     return(
       <TouchableOpacity onPress={() => 
         {
-          if(boxTrue ==1){
+          if(boxTrue == 1){
             setStyle=true;
           } else{
-
             setStyle=false;
           }
         }
@@ -174,7 +199,7 @@ return(
   {rowValues.map((boxValues,index) => {
     return(
 
-      <Box boxTrue={boxValues} index={index}/>
+      <CreateInteractPixel boxTrue={boxValues} index={index}/>
 
     );
   })}
@@ -223,23 +248,29 @@ export default class App extends React.Component {
         flexDirection: 'column',
         justifyContent: 'space-between',
       }}>
-        <Text style={{textAlign:'center'}}>
-          This is {params.name}
-        </Text>
-        <View style={{height:80,display:'flex',flexDirection:'row',flexWrap:'nowrap',justyContent:'center',alignSelf:'center',borderColor:'#000000'}}>
-          <View style={{width:50}}>
+          <Text style={{textAlign:'center'}}>
+            This is {params.name}
+          </Text>
+          <View style={{height:80,display:'flex',flexDirection:'row',flexWrap:'nowrap',justyContent:'center',alignSelf:'center',borderColor:'#000000'}}>
+            <View style={{width:50}}>
+            </View>
+            <SortCol levelData={params.stage}/>
           </View>
-          <SortCol levelData={params.stage}/>
-        </View>
-        <View style={{height:255,display:'flex',flexDirection:'row',flexWrap:'wrap',justifyContent:'center',alignSelf:'center',borderColor:'#000000'}}>
-          {params.stage.map((item,i) => {
-            
-          return(
-            <Row rowValues={item.row} index={i}/>
-          );
-          })}
-      </View>
-              <Text style={{display:'flex'}}>TestCount</Text>
+          <View style={{height:255,display:'flex',flexDirection:'row',flexWrap:'wrap',justifyContent:'center',alignSelf:'center',borderColor:'#000000'}}>
+            {params.stage.map((item,i) => {
+              
+            return(
+              <Row rowValues={item.row} index={i}/>
+            );
+            })}
+          </View>
+          <View style={{height:50,display:'flex',flexDirection:'row',flexWrap:'nowrap',justyContent:'center',alignSelf:'center'}}>
+                <View style={{width:150,display:'flex',flexDirection:'row',flexWrap:'nowrap',justyContent:'center',alignSelf:'center'}}>
+                <Image source={require('./img/MissRed.png')} style={{width:50,height:50,justyContent:'center',alignSelf:'center'}}/>
+                <Image source={require('./img/MissRed.png')} style={{width:50,height:50,justyContent:'center',alignSelf:'center'}}/>
+                <Image source={require('./img/MissRed.png')} style={{width:50,height:50,justyContent:'center',alignSelf:'center'}}/>
+                </View>
+          </View>
         </View>
       </View>
     );

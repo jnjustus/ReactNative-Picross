@@ -16,8 +16,9 @@
 {
   NSURL *jsCodeLocation;
 
-  jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-
+  /**jsCodeLocation = [[RCTBundleURLProvider sharedSettings] */
+  jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  /**jsBundleURLForBundleRoot:@"index" fallbackResource:nil];*/
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"Picross"
                                                initialProperties:nil

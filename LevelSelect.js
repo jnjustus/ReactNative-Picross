@@ -63,7 +63,7 @@ const puzzles = [
   LGuide:["3","2 2","2","2","4"],
   TGuide:["1","2 1","1 2","5","2 1"],
 },
-{name: 'VML', 
+{name: 'Crisscross', 
 format:
 [
   {row:[0,1,0,1,0]},
@@ -71,6 +71,54 @@ format:
   {row:[0,0,1,0,0]},
   {row:[1,1,0,1,1]},
   {row:[0,1,0,1,0]},
+  ],
+LGuide:["3","2 2","2","2","4"],
+TGuide:["1","2 1","1 2","5","2 1"],
+},
+{name: 'Bird', 
+format:
+[
+  {row:[0,0,1,1,1]},
+  {row:[0,1,0,1,1]},
+  {row:[1,1,1,1,1]},
+  {row:[0,0,1,1,1]},
+  {row:[0,0,1,1,1]},
+  ],
+LGuide:["3","2 2","2","2","4"],
+TGuide:["1","2 1","1 2","5","2 1"],
+},
+{name: 'Butterfly', 
+format:
+[
+  {row:[0,1,0,1,0]},
+  {row:[1,1,0,1,1]},
+  {row:[0,1,1,1,0]},
+  {row:[1,1,0,1,1]},
+  {row:[0,1,0,1,0]},
+  ],
+LGuide:["3","2 2","2","2","4"],
+TGuide:["1","2 1","1 2","5","2 1"],
+},
+{name: 'Pac', 
+format:
+[
+  {row:[0,1,1,1,0]},
+  {row:[1,1,1,1,1]},
+  {row:[1,1,0,0,0]},
+  {row:[1,1,1,1,1]},
+  {row:[0,1,1,1,0]},
+  ],
+LGuide:["3","2 2","2","2","4"],
+TGuide:["1","2 1","1 2","5","2 1"],
+},
+{name: 'Apple', 
+format:
+[
+  {row:[0,0,1,0,0]},
+  {row:[0,1,1,1,0]},
+  {row:[1,1,1,1,1]},
+  {row:[1,1,1,1,1]},
+  {row:[0,1,1,1,0]},
   ],
 LGuide:["3","2 2","2","2","4"],
 TGuide:["1","2 1","1 2","5","2 1"],
@@ -109,7 +157,7 @@ export default class App extends React.Component {
           console.log(toString(puzzle.name)),
           <Button 
           key={i} 
-          onPress={() => this.props.navigation.navigate('Level',{name: puzzle.name, stage: puzzle.format} )} 
+          onPress={() => this.props.navigation.navigate('Level',{name: puzzle.name, stage: puzzle.format, resetPuzzle: 0} )} 
           title={(i+1) +'. '+puzzle.name.toString()}
           />
         );

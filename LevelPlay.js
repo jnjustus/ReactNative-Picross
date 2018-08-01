@@ -2,10 +2,14 @@ import React from 'react';
 import { AppRegistry, Image,  StyleSheet, Text, View,ScrollView,Dimensions,TextInput,Button,Alert,TouchableHighlight,TouchableOpacity,TouchableNativeFeedback,TouchableWithoutFeedback,FlatList,SectionList,ActivityIndicator,Picker,Slider,Switch,  } from 'react-native';
 import { StackNavigator } from 'react-navigation'
 
+
+
 var LGuide = [];
 var TGuide = [];
 var TTest = ["1","2\n1","1\n2","5","2\n1"];
-var TestCount = 0;
+var ValidCells = 0;
+var CellsCorrect = 0;
+var Miss = 0;
 
 
 class CreateInteractPixel extends React.Component{
@@ -19,8 +23,9 @@ class CreateInteractPixel extends React.Component{
 
   var setStyle = false;
     if(boxTrue == 1){
+      
       return(
-        <TouchableOpacity onPress={() => {this.setState({pickedToggle: true})}}>
+        <TouchableOpacity onPress={() => {CheckComplete(this.state.pickedToggle,this.props.navigation),this.setState({pickedToggle: true})}}>
           <View key={index} style={[styles.whitePixel,this.state.pickedToggle && styles.blackPixel ]}>
           </View>
         </TouchableOpacity>
@@ -28,7 +33,7 @@ class CreateInteractPixel extends React.Component{
     }
     else{
       return(
-        <TouchableOpacity onPress={() => Alert.alert('Wrong')}>
+        <TouchableOpacity onPress={() => {CountMiss(this.props.navigation)}}>
           <View key={index} style={styles.whitePixel}>
           </View>
         </TouchableOpacity>
@@ -36,6 +41,25 @@ class CreateInteractPixel extends React.Component{
     }
   }
 }
+
+function CheckComplete(theState, navigation){
+  if(theState === false){
+    CellsCorrect++;
+    console.log(ValidCells + "===" + CellsCorrect);
+  }
+  
+  if(ValidCells === CellsCorrect){
+    CellsCorrect=0;
+    Alert.alert('Complete!','',[ {text: 'Okay', onPress: () => navigation.navigate('Levels')}]);
+    
+
+  }
+  else{
+    //Alert.alert(ValidCells + ' :out of: ' + CellsCorrect);
+  }
+}
+
+
 
 function Box(props){
   
@@ -197,9 +221,11 @@ return(
         <RowKey rowValue={rowValues} index={index}/>
       </View>
   {rowValues.map((boxValues,index) => {
+
+if(boxValues === 1){ValidCells ++;}
     return(
 
-      <CreateInteractPixel boxTrue={boxValues} index={index}/>
+      <CreateInteractPixel boxTrue={boxValues} index={index} navigation={props.navigation}/>
 
     );
   })}
@@ -226,17 +252,58 @@ function CheckPixel(props){
 
 }
 
+function CountMiss(navigation){
+  if (Miss < 2){
+    Miss++;
+    Alert.alert('Wrong')
+  }
+  else{
+    Miss=0;
+    Alert.alert('Game Over')
+    navigation.navigate('Levels');
+  }
+    console.log("Misses: " + Miss);
+}
+
+class DisplayMiss extends React.Component{
+render(){
+  if(Miss < 0){
+    for (m = 0; m < this.props.numberMisses; m++){
+      return(
+  <Image source={require('./img/MissRed.png')} style={{width:50,height:50,justyContent:'center',alignSelf:'center'}}/>
+      );
+    }
+  }
+  else{
+    return null;
+  }
+
+}
+
+}
+
 export default class App extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: 'Level ' + navigation.state.params.name,
   })
   constructor(props) {
     super(props);
-    this.state = {toggle: false};
+    this.state = {completed: false};
+    
   }
+
+
+
   render() {
+
     const{params} = this.props.navigation.state;
     console.log('chat props:' , this.props);
+    Miss = params.resetPuzzle;
+    ValidCells = params.resetPuzzle;
+    CellsCorrect = params.resetPuzzle;
+    console.log('countmiss='+Miss);
+    console.log('validcells='+ValidCells);
+    console.log('CellsCorrect='+CellsCorrect);
     let pic = {
       uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
     };
@@ -260,15 +327,13 @@ export default class App extends React.Component {
             {params.stage.map((item,i) => {
               
             return(
-              <Row rowValues={item.row} index={i}/>
+              <Row rowValues={item.row} index={i} navigation={this.props.navigation}/>
             );
             })}
           </View>
           <View style={{height:50,display:'flex',flexDirection:'row',flexWrap:'nowrap',justyContent:'center',alignSelf:'center'}}>
                 <View style={{width:150,display:'flex',flexDirection:'row',flexWrap:'nowrap',justyContent:'center',alignSelf:'center'}}>
-                <Image source={require('./img/MissRed.png')} style={{width:50,height:50,justyContent:'center',alignSelf:'center'}}/>
-                <Image source={require('./img/MissRed.png')} style={{width:50,height:50,justyContent:'center',alignSelf:'center'}}/>
-                <Image source={require('./img/MissRed.png')} style={{width:50,height:50,justyContent:'center',alignSelf:'center'}}/>
+                <DisplayMiss numberMisses={Miss}/>
                 </View>
           </View>
         </View>
